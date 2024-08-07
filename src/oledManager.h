@@ -37,14 +37,11 @@ typedef struct
 // OledManager class definition
 class OledManager {
 public:
-    OledManager();
-
-    void createOledManagerTask();
     void oledDisplay();
     void oledFadeOut();
     void oledFadeIn();
-    void disable();
-    void enable();
+    void oledDisable();
+    void oledEnable();
     void startScrollingLeft(uint8_t startPage, uint8_t endPage, uint8_t speed);
     void startScrollingRight(uint8_t startPage, uint8_t endPage, uint8_t speed);
     void stopScrolling();
@@ -52,10 +49,11 @@ public:
     void createTask();
 
 private:
-    OLED_SSD1306_Chart display;
 
     void handleAction(const ActionData& actionData);
 };
+
+extern OLED_SSD1306_Chart display;
 
 extern OledManager manager;
 

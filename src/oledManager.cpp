@@ -15,45 +15,45 @@ bool fading = false;
 bool waitingToFadein = false;
 bool waitingToFadeout = false;
 
-void oledDisplay() {
+void OledManager::oledDisplay() {
     Action action = OLED_DISPLAY;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
 }
 
-void oledFadeOut() {
+void OledManager::oledFadeOut() {
     Action action = OLED_FADE_OUT;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
 }
 
-void oledFadeIn() {
+void OledManager::oledFadeIn() {
     Action action = OLED_FADE_IN;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
 }
 
-void disable() {
+void OledManager::oledDisable() {
     Action action = OLED_DISABLE;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
 }
 
-void oledEnable() {
+void OledManager::oledEnable() {
     Action action = OLED_ENABLE;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
 }
 
-void sendOledCustomCommand(uint8_t command) {
+void OledManager::sendCustomCommand(uint8_t command) {
     ActionData actionData;
     actionData.action = OLED_CUSTOM_COMMAND;
     actionData.param1 = command;
     xQueueSend(actionQueue, &actionData, portMAX_DELAY);
 }
 
-void stopScrolling() {
+void OledManager::stopScrolling() {
     ActionData actionData;
     actionData.action = OLED_STOP_SCROLL;
     xQueueSend(actionQueue, &actionData, portMAX_DELAY);
 }
 
-void startScrollingLeft(uint8_t startPage, uint8_t endPage, uint8_t speed) {
+void OledManager::startScrollingLeft(uint8_t startPage, uint8_t endPage, uint8_t speed) {
     ActionData actionData;
     actionData.action = OLED_SCROLL_LEFT;
     actionData.param1 = startPage;
@@ -62,7 +62,7 @@ void startScrollingLeft(uint8_t startPage, uint8_t endPage, uint8_t speed) {
     xQueueSend(actionQueue, &actionData, portMAX_DELAY);
 }
 
-void startScrollingRight(uint8_t startPage, uint8_t endPage, uint8_t speed) {
+void OledManager::startScrollingRight(uint8_t startPage, uint8_t endPage, uint8_t speed) {
     ActionData actionData;
     actionData.action = OLED_SCROLL_RIGHT;
     actionData.param1 = startPage;
@@ -322,6 +322,6 @@ void initOledManager() {
     );
 }
 
-void createOledManagerTask() {
+void OledManager::createTask() {
     initOledManager();
 }
