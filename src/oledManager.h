@@ -1,19 +1,16 @@
 #ifndef OLEDMANAGER_H
 #define OLEDMANAGER_H
 
-#include "../defines.h"
+#include <Arduino.h>
 
-void oledDisplay();
-void oledFadeout();
-void oledFadein();
+#include <OLED_SSD1306_Chart.h>
 
-void oledDisable();
-void oledEnable();
+// Oled display constants
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define SSD1306_I2C_ADDRESS 0x3C
 
-void startScrollingLeft(uint8_t startPage, uint8_t endPage, uint8_t speed);
-void startScrollingRight(uint8_t startPage, uint8_t endPage, uint8_t speed);
-void stopScrolling();
-
+// Enum for actions
 typedef enum
 {
     OLED_NO_ACTION,
@@ -23,22 +20,44 @@ typedef enum
     OLED_ENABLE,
     OLED_DISABLE,
     OLED_CUSTOM_COMMAND,
-    OLED_SCROLL_LEFT,  // New action for scrolling
-    OLED_SCROLL_RIGHT, // New action for scrolling
-    OLED_STOP_SCROLL  // Atction for stopping scrolling
-    // Add more actions if needed
+    OLED_SCROLL_LEFT,
+    OLED_SCROLL_RIGHT,
+    OLED_STOP_SCROLL
 } Action;
 
+// Struct for action data
 typedef struct
 {
     Action action;
-    uint8_t param1; // Parameter 1 for scrolling
-    uint8_t param2; // Parameter 2 for scrolling
-    uint8_t param3; // Parameter 2 for scrolling
+    uint8_t param1;
+    uint8_t param2;
+    uint8_t param3;
 } ActionData;
 
-void createOledManagerTask();
+// OledManager class definition
+class OledManager {
+public:
+    OledManager();
 
-void sendOledCustomCommand(uint8_t command);
+    void createOledManagerTask();
+    void oledDisplay();
+    void oledFadeOut();
+    void oledFadeIn();
+    void disable();
+    void enable();
+    void startScrollingLeft(uint8_t startPage, uint8_t endPage, uint8_t speed);
+    void startScrollingRight(uint8_t startPage, uint8_t endPage, uint8_t speed);
+    void stopScrolling();
+    void sendCustomCommand(uint8_t command);
+    void createTask();
 
-#endif
+private:
+    OLED_SSD1306_Chart display;
+
+    void handleAction(const ActionData& actionData);
+};
+
+extern OledManager manager;
+
+
+#endif // OLEDMANAGER_H
