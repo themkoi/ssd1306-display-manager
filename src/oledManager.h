@@ -35,7 +35,7 @@ typedef struct
 } ActionData;
 
 // OledManager class definition
-class OledManager {
+class OLED_MANAGER {
 public:
     void oledDisplay();
     void oledFadeOut();
@@ -55,7 +55,7 @@ private:
 
 extern OLED_SSD1306_Chart display;
 
-extern OledManager manager;
+extern OLED_MANAGER manager;
 
 
 #endif // OLEDMANAGER_H

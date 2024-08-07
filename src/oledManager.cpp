@@ -1,6 +1,6 @@
 #include "oledManager.h"
 
-OledManager manager;
+OLED_MANAGER manager;
 
 // Queue and mutex handles
 QueueHandle_t actionQueue;
@@ -15,45 +15,45 @@ bool fading = false;
 bool waitingToFadein = false;
 bool waitingToFadeout = false;
 
-void OledManager::oledDisplay() {
+void OLED_MANAGER::oledDisplay() {
     Action action = OLED_DISPLAY;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
 }
 
-void OledManager::oledFadeOut() {
+void OLED_MANAGER::oledFadeOut() {
     Action action = OLED_FADE_OUT;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
 }
 
-void OledManager::oledFadeIn() {
+void OLED_MANAGER::oledFadeIn() {
     Action action = OLED_FADE_IN;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
 }
 
-void OledManager::oledDisable() {
+void OLED_MANAGER::oledDisable() {
     Action action = OLED_DISABLE;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
 }
 
-void OledManager::oledEnable() {
+void OLED_MANAGER::oledEnable() {
     Action action = OLED_ENABLE;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
 }
 
-void OledManager::sendCustomCommand(uint8_t command) {
+void OLED_MANAGER::sendCustomCommand(uint8_t command) {
     ActionData actionData;
     actionData.action = OLED_CUSTOM_COMMAND;
     actionData.param1 = command;
     xQueueSend(actionQueue, &actionData, portMAX_DELAY);
 }
 
-void OledManager::stopScrolling() {
+void OLED_MANAGER::stopScrolling() {
     ActionData actionData;
     actionData.action = OLED_STOP_SCROLL;
     xQueueSend(actionQueue, &actionData, portMAX_DELAY);
 }
 
-void OledManager::startScrollingLeft(uint8_t startPage, uint8_t endPage, uint8_t speed) {
+void OLED_MANAGER::startScrollingLeft(uint8_t startPage, uint8_t endPage, uint8_t speed) {
     ActionData actionData;
     actionData.action = OLED_SCROLL_LEFT;
     actionData.param1 = startPage;
@@ -62,7 +62,7 @@ void OledManager::startScrollingLeft(uint8_t startPage, uint8_t endPage, uint8_t
     xQueueSend(actionQueue, &actionData, portMAX_DELAY);
 }
 
-void OledManager::startScrollingRight(uint8_t startPage, uint8_t endPage, uint8_t speed) {
+void OLED_MANAGER::startScrollingRight(uint8_t startPage, uint8_t endPage, uint8_t speed) {
     ActionData actionData;
     actionData.action = OLED_SCROLL_RIGHT;
     actionData.param1 = startPage;
@@ -217,7 +217,7 @@ void customCommandImplementation(uint8_t command) {
 unsigned long lastActionTimestamp = 0;
 Action lastAction = OLED_NO_ACTION;
 
-void oledManagerTask(void *pvParameters) {
+void OLED_MANAGERTask(void *pvParameters) {
     ActionData actionData;
     while (true) {
         if (xQueueReceive(actionQueue, &actionData, portMAX_DELAY)) {
@@ -299,7 +299,7 @@ void oledManagerTask(void *pvParameters) {
     }
 }
 
-void initOledManager() {
+void initOLED_MANAGER() {
     display = OLED_SSD1306_Chart(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1, 200000); // Initialize display object here
     if (!display.begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS)) {
         Serial.println(F("SSD1306 allocation failed"));
@@ -312,8 +312,8 @@ void initOledManager() {
     actionMutex = xSemaphoreCreateMutex();
 
     xTaskCreatePinnedToCore(
-        oledManagerTask, /* Task function. */
-        "oledManager",   /* String with name of task. */
+        OLED_MANAGERTask, /* Task function. */
+        "OLED_MANAGER",   /* String with name of task. */
         10000,           /* Stack size in words. */
         NULL,            /* Parameter passed as input of the task */
         1,               /* Priority of the task. */
@@ -322,6 +322,6 @@ void initOledManager() {
     );
 }
 
-void OledManager::createTask() {
-    initOledManager();
+void OLED_MANAGER::createTask() {
+    initOLED_MANAGER();
 }
