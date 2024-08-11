@@ -283,7 +283,7 @@ void customCommandImplementation(uint8_t command)
     delay(100);
 }
 
-#define DEBOUNCE_TIME_MS 5
+#define DEBOUNCE_TIME_MS 1
 
 unsigned long lastActionTimestamp = 0;
 Action lastAction = OLED_NO_ACTION;
@@ -378,7 +378,7 @@ void OLED_MANAGERTask(void *pvParameters)
                 Serial.println("Action debounced");
             }
         }
-        vTaskDelay(pdMS_TO_TICKS(5)); // Adjust delay as needed
+        vTaskDelay(pdMS_TO_TICKS(1)); // Adjust delay as needed
     }
 }
 
