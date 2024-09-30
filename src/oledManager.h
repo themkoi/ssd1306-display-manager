@@ -53,7 +53,7 @@ private:
     void handleAction(const ActionData& actionData);
 };
 
-extern OLED_SSD1306_Chart display;
+extern Adafruit_SSD1306 display;
 
 extern OLED_MANAGER manager;
 

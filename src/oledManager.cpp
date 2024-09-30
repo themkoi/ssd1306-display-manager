@@ -6,8 +6,6 @@ OLED_MANAGER manager;
 QueueHandle_t actionQueue;
 SemaphoreHandle_t actionMutex;
 
-// Initialize the display object within the init function
-OLED_SSD1306_Chart display;
 
 bool displaying = false;
 bool waitingToDisplay = false;
@@ -384,7 +382,7 @@ void OLED_MANAGERTask(void *pvParameters)
 
 void initOLED_MANAGER()
 {
-    display = OLED_SSD1306_Chart(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1, 200000); // Initialize display object here
+    display = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1, 200000); // Initialize display object here
     if (!display.begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS))
     {
         Serial.println(F("SSD1306 allocation failed"));
