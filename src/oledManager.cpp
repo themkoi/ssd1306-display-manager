@@ -118,7 +118,7 @@ void oledFadeOutImplementation()
 
     delay(100);
     // Fade out
-    for (int dim = 150; dim >= 0; dim -= 10)
+    for (int dim = 150; dim >= 1; dim -= 10)
     {
         display.ssd1306_command(0x81); // Contrast control command
         display.ssd1306_command(dim);  // Set contrast value
@@ -127,7 +127,7 @@ void oledFadeOutImplementation()
 
     delay(50);
 
-    for (int dim2 = 34; dim2 >= 0; dim2 -= 17)
+    for (int dim2 = 34; dim2 >= 1; dim2 -= 17)
     {
         display.ssd1306_command(0xD9); // Pre-charge period command
         display.ssd1306_command(dim2); // Set pre-charge period
@@ -318,7 +318,6 @@ void OLED_MANAGERTask(void *pvParameters)
                 case OLED_DISPLAY:
                     if (!fading && !displaying)
                     {
-                        Serial.println("Processing OLED Display");
                         vTaskDelay(pdMS_TO_TICKS(5));
                         oledDisplayImplementation();
                     }
@@ -356,7 +355,6 @@ void OLED_MANAGERTask(void *pvParameters)
                     startScrollRightImplementation(actionData.param1, actionData.param2, actionData.param3);
                     break;
                 case OLED_STOP_SCROLL:
-                    Serial.println("Stopping scroll");
                     stopScrollImplementation();
                     break;
                 case OLED_CUSTOM_COMMAND:
