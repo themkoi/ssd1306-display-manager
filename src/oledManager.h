@@ -2,8 +2,8 @@
 #define OLEDMANAGER_H
 
 #include <Arduino.h>
+#include <Adafruit_SSD1306.h>
 
-#include <OLED_SSD1306_Chart.h>
 
 // Oled display constants
 #define SCREEN_WIDTH 128
