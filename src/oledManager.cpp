@@ -11,7 +11,6 @@ bool waitingToDisplay = false;
 bool fading = false;
 bool waitingToFadein = false;
 bool waitingToFadeout = false;
-bool enabled = false;
 
 void OLED_MANAGER::oledDisplay()
 {
@@ -81,9 +80,9 @@ void OLED_MANAGER::startScrollingRight(uint8_t startPage, uint8_t endPage, uint8
 // Communication to the display
 void disableImplementation()
 {
-    if (enabled == true)
+    if (manager.ScreenEnabled == true)
     {
-        enabled = false;
+        manager.ScreenEnabled = false;
         delay(100);
         display.ssd1306_command(SSD1306_DISPLAYOFF);
         delay(100);
@@ -92,9 +91,9 @@ void disableImplementation()
 
 void oledEnableImplementation()
 {
-    if (enabled == false)
+    if (manager.ScreenEnabled == false)
     {
-        enabled = true;
+        manager.ScreenEnabled = true;
         delay(100);
         display.ssd1306_command(SSD1306_DISPLAYON);
         delay(100);
@@ -373,7 +372,7 @@ void OLED_MANAGERTask(void *pvParameters)
                 Serial.println("Action debounced");
             }
         }
-        vTaskDelay(pdMS_TO_TICKS(1)); // Adjust delay as needed
+        vTaskDelay(pdMS_TO_TICKS(10)); // Adjust delay as needed
     }
 }
 
@@ -397,7 +396,7 @@ void initOLED_MANAGER()
         "OLED_MANAGER",   /* String with name of task. */
         10000,            /* Stack size in words. */
         NULL,             /* Parameter passed as input of the task */
-        1,                /* Priority of the task. */
+        5,                /* Priority of the task. */
         NULL,             /* Task handle. */
         1                 /* Core where the task should run. */
     );

@@ -47,7 +47,7 @@ public:
     void stopScrolling();
     void sendCustomCommand(uint8_t command);
     void createTask();
-
+    bool ScreenEnabled;
 private:
 
     void handleAction(const ActionData& actionData);
