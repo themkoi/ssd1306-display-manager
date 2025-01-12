@@ -376,7 +376,7 @@ void OLED_MANAGERTask(void *pvParameters)
     }
 }
 
-Adafruit_SSD1306 display = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1, 200000); // Initialize display object here
+Adafruit_SSD1306 display = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1, 500000); // Initialize display object here
 
 void initOLED_MANAGER()
 {
