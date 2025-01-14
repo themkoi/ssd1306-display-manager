@@ -142,7 +142,7 @@ void oledFadeInImplementation()
 
     delay(100);
     // Fade in
-    for (uint8_t dim = 0; dim <= 160; dim += 10)
+    for (uint8_t dim = 1; dim <= 160; dim += 10)
     {
         display.ssd1306_command(0x81);
         display.ssd1306_command(dim);
@@ -151,7 +151,7 @@ void oledFadeInImplementation()
 
     delay(50);
 
-    for (uint8_t dim2 = 0; dim2 <= 34; dim2 += 17)
+    for (uint8_t dim2 = 1; dim2 <= 34; dim2 += 17)
     {
         display.ssd1306_command(0xD9);
         display.ssd1306_command(dim2);
@@ -376,7 +376,7 @@ void OLED_MANAGERTask(void *pvParameters)
     }
 }
 
-Adafruit_SSD1306 display = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1, 500000); // Initialize display object here
+Adafruit_SSD1306 display = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1, 400000); // Initialize display object here
 
 void initOLED_MANAGER()
 {
