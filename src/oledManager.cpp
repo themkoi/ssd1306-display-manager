@@ -17,7 +17,6 @@ void OLED_MANAGER::oledDisplay()
     Action action = OLED_DISPLAY;
     manager.finishedDisplaying = false;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
-    while (manager.finishedDisplaying == false);
     delay(1);
 }
 
