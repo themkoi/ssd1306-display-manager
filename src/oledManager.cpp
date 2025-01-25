@@ -14,8 +14,8 @@ bool waitingToFadeout = false;
 
 void OLED_MANAGER::oledDisplay()
 {
-    manager.finishedDisplaying = false;
     Action action = OLED_DISPLAY;
+    manager.finishedDisplaying = false;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
 }
 
@@ -33,17 +33,19 @@ void OLED_MANAGER::oledFadeIn()
 
 void OLED_MANAGER::oledDisable()
 {
-    Action action = OLED_DISABLE;
-    xQueueSend(actionQueue, &action, portMAX_DELAY);
+    if (manager.ScreenEnabled == true)
+    {
+        Action action = OLED_DISABLE;
+        xQueueSend(actionQueue, &action, portMAX_DELAY);
+    }
 }
 
 void OLED_MANAGER::oledEnable()
 {
-    Action action = OLED_ENABLE;
-    xQueueSend(actionQueue, &action, portMAX_DELAY);
-    while (manager.finishedDisplaying == false)
+    if (manager.ScreenEnabled == false)
     {
-        vTaskDelay(1);
+        Action action = OLED_ENABLE;
+        xQueueSend(actionQueue, &action, portMAX_DELAY);
     }
 }
 
@@ -322,7 +324,6 @@ void OLED_MANAGERTask(void *pvParameters)
                 case OLED_DISPLAY:
                     if (!fading && !displaying)
                     {
-                        vTaskDelay(pdMS_TO_TICKS(5));
                         oledDisplayImplementation();
                     }
                     break;
