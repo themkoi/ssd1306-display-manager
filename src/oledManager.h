@@ -48,6 +48,7 @@ public:
     void sendCustomCommand(uint8_t command);
     void createTask();
     bool ScreenEnabled;
+    bool finishedDisplaying;
 private:
 
     void handleAction(const ActionData& actionData);

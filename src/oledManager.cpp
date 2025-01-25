@@ -14,6 +14,7 @@ bool waitingToFadeout = false;
 
 void OLED_MANAGER::oledDisplay()
 {
+    manager.finishedDisplaying = false;
     Action action = OLED_DISPLAY;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
 }
@@ -40,6 +41,10 @@ void OLED_MANAGER::oledEnable()
 {
     Action action = OLED_ENABLE;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
+    while (manager.finishedDisplaying == false)
+    {
+        vTaskDelay(1);
+    }
 }
 
 void OLED_MANAGER::sendCustomCommand(uint8_t command)
@@ -104,6 +109,7 @@ void oledDisplayImplementation()
 {
     vTaskDelay(pdMS_TO_TICKS(1));
     display.display();
+    manager.finishedDisplaying = true;
     vTaskDelay(pdMS_TO_TICKS(1));
 }
 
