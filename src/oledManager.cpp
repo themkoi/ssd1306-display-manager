@@ -18,6 +18,7 @@ void OLED_MANAGER::oledDisplay()
     manager.finishedDisplaying = false;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
     while (manager.finishedDisplaying == false);
+    delay(1);
 }
 
 void OLED_MANAGER::oledFadeOut()
