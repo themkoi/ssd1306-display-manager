@@ -17,6 +17,7 @@ void OLED_MANAGER::oledDisplay()
     Action action = OLED_DISPLAY;
     manager.finishedDisplaying = false;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
+    while (manager.finishedDisplaying == false);
 }
 
 void OLED_MANAGER::oledFadeOut()
@@ -128,6 +129,7 @@ void oledFadeOutImplementation()
     {
         display.ssd1306_command(0x81); // Contrast control command
         display.ssd1306_command(dim);  // Set contrast value
+        Serial.println("Contrast: " + String(dim));
         delay(10);
     }
 
@@ -137,8 +139,20 @@ void oledFadeOutImplementation()
     {
         display.ssd1306_command(0xD9); // Pre-charge period command
         display.ssd1306_command(dim2); // Set pre-charge period
-        delay(20);
+        Serial.println("Pre Charge: " + String(dim2));
+        delay(50);
+
+        if (dim2 - 17 < 1)
+        {
+            dim2 = 16;
+            display.ssd1306_command(0xD9);
+            display.ssd1306_command(dim2);
+            Serial.println("Pre Charge: " + String(dim2));
+            delay(20);
+            break;
+        }
     }
+
     delay(100);
 
     fading = false; // Reset fading flag
@@ -154,6 +168,7 @@ void oledFadeInImplementation()
     {
         display.ssd1306_command(0x81);
         display.ssd1306_command(dim);
+        Serial.println("Contrast: " + String(dim));
         delay(10);
     }
 
@@ -163,6 +178,7 @@ void oledFadeInImplementation()
     {
         display.ssd1306_command(0xD9);
         display.ssd1306_command(dim2);
+        Serial.println("Pre Charge: " + String(dim2));
         delay(30);
     }
     delay(100);
