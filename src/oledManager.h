@@ -49,6 +49,7 @@ public:
     void createTask();
     bool ScreenEnabled;
     bool finishedDisplaying;
+    bool scrolling;
 private:
 
     void handleAction(const ActionData& actionData);

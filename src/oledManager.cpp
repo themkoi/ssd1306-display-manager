@@ -17,7 +17,7 @@ void OLED_MANAGER::oledDisplay()
     Action action = OLED_DISPLAY;
     manager.finishedDisplaying = false;
     xQueueSend(actionQueue, &action, portMAX_DELAY);
-    delay(1);
+    delay(20);
 }
 
 void OLED_MANAGER::oledFadeOut()
@@ -108,9 +108,14 @@ void oledEnableImplementation()
     }
 }
 
+void stopScrollImplementation();
+
 void oledDisplayImplementation()
 {
-    vTaskDelay(pdMS_TO_TICKS(1));
+    if (manager.scrolling == true)
+    {
+        stopScrollImplementation();
+    }
     display.display();
     manager.finishedDisplaying = true;
     vTaskDelay(pdMS_TO_TICKS(1));
@@ -237,6 +242,7 @@ void startScrollLeftImplementation(uint8_t startPage, uint8_t endPage, uint8_t s
     sendCommand(endPage);   // End page address
     sendCommand(0x00);      // Dummy bytes
     sendCommand(0xFF);
+    manager.scrolling = true;
     sendCommand(0x2F); // Activate scroll
     delay(10);
 }
@@ -285,6 +291,7 @@ void startScrollRightImplementation(uint8_t startPage, uint8_t endPage, uint8_t 
     sendCommand(endPage);   // End page address
     sendCommand(0x00);      // Dummy bytes
     sendCommand(0xFF);
+    manager.scrolling = true;
     sendCommand(0x2F); // Activate scroll
     delay(10);
 }
@@ -293,6 +300,7 @@ void stopScrollImplementation()
 {
     delay(1);
     display.stopscroll();
+    manager.scrolling = false;
     delay(1);
 }
 
@@ -319,83 +327,82 @@ void OLED_MANAGERTask(void *pvParameters)
 
             if (currentMillis - lastActionTimestamp >= DEBOUNCE_TIME_MS || actionData.action != lastAction)
             {
-                xSemaphoreTake(actionMutex, portMAX_DELAY);
+                    switch (actionData.action)
+                    {
+                    case OLED_FADE_IN:
+                        if (!fading && !displaying)
+                        {
+                            Serial.println("Processing OLED Fade In");
+                            oledFadeInImplementation();
+                        }
+                        break;
+                    case OLED_FADE_OUT:
+                        if (!fading && !displaying)
+                        {
+                            Serial.println("Processing OLED Fade Out");
+                            oledFadeOutImplementation();
+                        }
+                        break;
+                    case OLED_DISPLAY:
+                        if (!fading && !displaying)
+                        {
+                            oledDisplayImplementation();
+                        }
+                        break;
+                    case OLED_ENABLE:
+                        if (!fading && !displaying)
+                        {
+                            Serial.println("Processing OLED Enable");
+                            oledEnableImplementation();
+                        }
+                        break;
+                    case OLED_DISABLE:
+                        if (!fading && !displaying)
+                        {
+                            Serial.println("Processing OLED Disable");
+                            disableImplementation();
+                        }
+                        break;
+                    case OLED_SCROLL_LEFT:
+                        Serial.print("Scrolling left with parameters: ");
+                        Serial.print(actionData.param1, HEX);
+                        Serial.print(", ");
+                        Serial.print(actionData.param2, HEX);
+                        Serial.print(", ");
+                        Serial.println(actionData.param3, HEX);
+                        startScrollLeftImplementation(actionData.param1, actionData.param2, actionData.param3);
+                        break;
+                    case OLED_SCROLL_RIGHT:
+                        Serial.print("Scrolling right with parameters: ");
+                        Serial.print(actionData.param1, HEX);
+                        Serial.print(", ");
+                        Serial.print(actionData.param2, HEX);
+                        Serial.print(", ");
+                        Serial.println(actionData.param3, HEX);
+                        startScrollRightImplementation(actionData.param1, actionData.param2, actionData.param3);
+                        break;
+                    case OLED_STOP_SCROLL:
+                        stopScrollImplementation();
+                        break;
+                    case OLED_CUSTOM_COMMAND:
+                        // Handle custom command if needed
+                        break;
+                    default:
+                        Serial.println("Unknown action");
+                        break;
+                    }
 
-                switch (actionData.action)
-                {
-                case OLED_FADE_IN:
-                    if (!fading && !displaying)
-                    {
-                        Serial.println("Processing OLED Fade In");
-                        oledFadeInImplementation();
-                    }
-                    break;
-                case OLED_FADE_OUT:
-                    if (!fading && !displaying)
-                    {
-                        Serial.println("Processing OLED Fade Out");
-                        oledFadeOutImplementation();
-                    }
-                    break;
-                case OLED_DISPLAY:
-                    if (!fading && !displaying)
-                    {
-                        oledDisplayImplementation();
-                    }
-                    break;
-                case OLED_ENABLE:
-                    if (!fading && !displaying)
-                    {
-                        Serial.println("Processing OLED Enable");
-                        oledEnableImplementation();
-                    }
-                    break;
-                case OLED_DISABLE:
-                    if (!fading && !displaying)
-                    {
-                        Serial.println("Processing OLED Disable");
-                        disableImplementation();
-                    }
-                    break;
-                case OLED_SCROLL_LEFT:
-                    Serial.print("Scrolling left with parameters: ");
-                    Serial.print(actionData.param1, HEX);
-                    Serial.print(", ");
-                    Serial.print(actionData.param2, HEX);
-                    Serial.print(", ");
-                    Serial.println(actionData.param3, HEX);
-                    startScrollLeftImplementation(actionData.param1, actionData.param2, actionData.param3);
-                    break;
-                case OLED_SCROLL_RIGHT:
-                    Serial.print("Scrolling right with parameters: ");
-                    Serial.print(actionData.param1, HEX);
-                    Serial.print(", ");
-                    Serial.print(actionData.param2, HEX);
-                    Serial.print(", ");
-                    Serial.println(actionData.param3, HEX);
-                    startScrollRightImplementation(actionData.param1, actionData.param2, actionData.param3);
-                    break;
-                case OLED_STOP_SCROLL:
-                    stopScrollImplementation();
-                    break;
-                case OLED_CUSTOM_COMMAND:
-                    // Handle custom command if needed
-                    break;
-                default:
-                    Serial.println("Unknown action");
-                    break;
-                }
+                    xSemaphoreGive(actionMutex);
+                    lastAction = actionData.action;
+                    lastActionTimestamp = currentMillis;
 
-                xSemaphoreGive(actionMutex);
-                lastAction = actionData.action;
-                lastActionTimestamp = currentMillis;
             }
             else
             {
                 Serial.println("Action debounced");
             }
         }
-        vTaskDelay(pdMS_TO_TICKS(10)); // Adjust delay as needed
+        vTaskDelay(pdMS_TO_TICKS(1)); // Adjust delay as needed
     }
 }
 
