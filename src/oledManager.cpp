@@ -124,6 +124,7 @@ void oledDisplayImplementation()
 
 void oledFadeOutImplementation()
 {
+    manager.dimmed = true;
     if (fading || displaying)
         return; // Check if already fading or displaying
 
@@ -160,12 +161,12 @@ void oledFadeOutImplementation()
     }
 
     delay(100);
-    manager.dimmed = true;
     fading = false; // Reset fading flag
 }
 
 void oledFadeInImplementation()
 {
+    manager.dimmed = false;
     fading = true; // Set fading flag to true
 
     delay(100);
@@ -188,8 +189,6 @@ void oledFadeInImplementation()
         delay(30);
     }
     delay(100);
-
-    manager.dimmed = false;
     fading = false; // Reset fading flag
 }
 
