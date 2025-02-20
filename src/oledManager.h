@@ -48,6 +48,7 @@ public:
     void sendCustomCommand(uint8_t command);
     void createTask();
     bool ScreenEnabled;
+    bool dimmed;
     bool finishedDisplaying;
     bool scrolling;
 private:

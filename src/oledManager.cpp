@@ -160,7 +160,7 @@ void oledFadeOutImplementation()
     }
 
     delay(100);
-
+    manager.dimmed = true;
     fading = false; // Reset fading flag
 }
 
@@ -189,6 +189,7 @@ void oledFadeInImplementation()
     }
     delay(100);
 
+    manager.dimmed = false;
     fading = false; // Reset fading flag
 }
 
