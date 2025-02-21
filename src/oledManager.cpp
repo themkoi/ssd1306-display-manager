@@ -126,9 +126,9 @@ void oledFadeOutImplementation()
 {
     manager.dimmed = true;
     if (fading || displaying)
-        return; // Check if already fading or displaying
+        return;
 
-    fading = true; // Set fading flag to true
+    fading = true;
 
     delay(100);
     // Fade out
@@ -161,13 +161,13 @@ void oledFadeOutImplementation()
     }
 
     delay(100);
-    fading = false; // Reset fading flag
+    fading = false;
 }
 
 void oledFadeInImplementation()
 {
     manager.dimmed = false;
-    fading = true; // Set fading flag to true
+    fading = true;
 
     delay(100);
     // Fade in
@@ -189,7 +189,7 @@ void oledFadeInImplementation()
         delay(30);
     }
     delay(100);
-    fading = false; // Reset fading flag
+    fading = false; 
 }
 
 void sendCommand(uint8_t command)
@@ -199,7 +199,6 @@ void sendCommand(uint8_t command)
     delay(10);
 }
 
-// Function to start horizontal scroll left with customizable speed
 void startScrollLeftImplementation(uint8_t startPage, uint8_t endPage, uint8_t speed)
 {
     uint8_t interval;
@@ -235,7 +234,6 @@ void startScrollLeftImplementation(uint8_t startPage, uint8_t endPage, uint8_t s
     }
     delay(10);
 
-    // Command for horizontal scroll left
     sendCommand(0x27);      // Command for left horizontal scroll
     sendCommand(0x00);      // Dummy byte
     sendCommand(startPage); // Start page address
@@ -248,7 +246,6 @@ void startScrollLeftImplementation(uint8_t startPage, uint8_t endPage, uint8_t s
     delay(10);
 }
 
-// Function to start horizontal scroll right with customizable speed
 void startScrollRightImplementation(uint8_t startPage, uint8_t endPage, uint8_t speed)
 {
     uint8_t interval;
@@ -284,7 +281,6 @@ void startScrollRightImplementation(uint8_t startPage, uint8_t endPage, uint8_t 
     }
     delay(10);
 
-    // Command for horizontal scroll right
     sendCommand(0x26);      // Command for right horizontal scroll
     sendCommand(0x00);      // Dummy byte
     sendCommand(startPage); // Start page address
@@ -386,7 +382,6 @@ void OLED_MANAGERTask(void *pvParameters)
                         stopScrollImplementation();
                         break;
                     case OLED_CUSTOM_COMMAND:
-                        // Handle custom command if needed
                         break;
                     default:
                         Serial.println("Unknown action");
