@@ -2,7 +2,6 @@
 
 OLED_MANAGER manager;
 
-// Queue and mutex handles
 QueueHandle_t actionQueue;
 SemaphoreHandle_t actionMutex;
 
@@ -398,11 +397,11 @@ void OLED_MANAGERTask(void *pvParameters)
                 Serial.println("Action debounced");
             }
         }
-        vTaskDelay(pdMS_TO_TICKS(1)); // Adjust delay as needed
+        vTaskDelay(pdMS_TO_TICKS(1));
     }
 }
 
-Adafruit_SSD1306 display = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1, 400000); // Initialize display object here
+Adafruit_SSD1306 display = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1, 400000);
 
 void initOLED_MANAGER()
 {
