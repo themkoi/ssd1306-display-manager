@@ -4,7 +4,6 @@
 #include <Arduino.h>
 #include <Adafruit_SSD1306.h>
 
-
 // Oled display constants
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
@@ -35,30 +34,22 @@ typedef struct
 } ActionData;
 
 // OledManager class definition
-class OLED_MANAGER {
+class OLED_MANAGER
+{
 public:
-    void oledDisplay();
-    void oledFadeOut();
-    void oledFadeIn();
-    void oledDisable();
-    void oledEnable();
-    void startScrollingLeft(uint8_t startPage, uint8_t endPage, uint8_t speed);
-    void startScrollingRight(uint8_t startPage, uint8_t endPage, uint8_t speed);
-    void stopScrolling();
-    void sendCustomCommand(uint8_t command);
+    void sendOledAction(Action action, uint8_t param1 = 0, uint8_t param2 = 0, uint8_t param3 = 0);
     void createTask();
     bool ScreenEnabled;
     bool dimmed;
     bool finishedDisplaying;
     bool scrolling;
-private:
 
-    void handleAction(const ActionData& actionData);
+private:
+    void handleAction(const ActionData &actionData);
 };
 
 extern Adafruit_SSD1306 display;
 
 extern OLED_MANAGER manager;
-
 
 #endif // OLEDMANAGER_H
