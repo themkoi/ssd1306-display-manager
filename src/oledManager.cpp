@@ -382,7 +382,7 @@ void initOLED_MANAGER()
     xTaskCreatePinnedToCore(
         OLED_MANAGERTask, /* Task function. */
         "OLED_MANAGER",   /* String with name of task. */
-        10000,            /* Stack size in words. */
+        2048,            /* Stack size in words. */
         NULL,             /* Parameter passed as input of the task */
         5,                /* Priority of the task. */
         &screenTask,      /* Task handle. */
