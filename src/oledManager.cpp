@@ -27,8 +27,8 @@ void OLED_MANAGER::sendOledAction(Action action, uint8_t param1, uint8_t param2,
     {
         manager.finishedDisplaying = false;
         sendQueue(actionQueue, actionData, 1000);
-        delay(16);
-        vTaskDelay(10);
+        delay(15);
+        vTaskDelay(1);
     }
     else
     {
@@ -38,7 +38,7 @@ void OLED_MANAGER::sendOledAction(Action action, uint8_t param1, uint8_t param2,
 
 void sendQueue(QueueHandle_t queue, ActionData data, TickType_t delay)
 {
-    eTaskState taskState = eTaskGetState(screenTask);
+    eTaskState taskState = eTaskGetState(screenTask);    
     if (taskState == eSuspended)
     {
         vTaskResume(screenTask);
@@ -364,7 +364,7 @@ void OLED_MANAGERTask(void *pvParameters)
     }
 }
 
-Adafruit_SSD1306 display = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1, 400000);
+Adafruit_SSD1306 display = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1, 800000);
 
 void initOLED_MANAGER()
 {
