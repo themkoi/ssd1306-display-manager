@@ -371,8 +371,6 @@ void initOLED_MANAGER()
     if (!display.begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS))
     {
         Serial.println(F("SSD1306 allocation failed"));
-        for (;;)
-            ; // Don't proceed, loop forever
     }
     display.clearDisplay();
 
