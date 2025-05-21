@@ -96,7 +96,6 @@ void oledFadeOutImplementation()
     {
         display.ssd1306_command(0x81); // Contrast control command
         display.ssd1306_command(dim);  // Set contrast value
-        Serial.println("Contrast: " + String(dim));
         delay(10);
     }
 
@@ -106,7 +105,6 @@ void oledFadeOutImplementation()
     {
         display.ssd1306_command(0xD9); // Pre-charge period command
         display.ssd1306_command(dim2); // Set pre-charge period
-        Serial.println("Pre Charge: " + String(dim2));
         delay(50);
 
         if (dim2 - 17 < 1)
@@ -114,7 +112,6 @@ void oledFadeOutImplementation()
             dim2 = 16;
             display.ssd1306_command(0xD9);
             display.ssd1306_command(dim2);
-            Serial.println("Pre Charge: " + String(dim2));
             delay(20);
             break;
         }
@@ -135,7 +132,6 @@ void oledFadeInImplementation()
     {
         display.ssd1306_command(0x81);
         display.ssd1306_command(dim);
-        Serial.println("Contrast: " + String(dim));
         delay(10);
     }
 
@@ -145,7 +141,6 @@ void oledFadeInImplementation()
     {
         display.ssd1306_command(0xD9);
         display.ssd1306_command(dim2);
-        Serial.println("Pre Charge: " + String(dim2));
         delay(30);
     }
     delay(100);
@@ -289,14 +284,12 @@ void OLED_MANAGERTask(void *pvParameters)
                 case OLED_FADE_IN:
                     if (!fading && !displaying)
                     {
-                        Serial.println("Processing OLED Fade In");
                         oledFadeInImplementation();
                     }
                     break;
                 case OLED_FADE_OUT:
                     if (!fading && !displaying)
                     {
-                        Serial.println("Processing OLED Fade Out");
                         oledFadeOutImplementation();
                     }
                     break;
@@ -309,19 +302,16 @@ void OLED_MANAGERTask(void *pvParameters)
                 case OLED_ENABLE:
                     if (!fading && !displaying)
                     {
-                        Serial.println("Processing OLED Enable");
                         oledEnableImplementation();
                     }
                     break;
                 case OLED_DISABLE:
                     if (!fading && !displaying)
                     {
-                        Serial.println("Processing OLED Disable");
                         disableImplementation();
                     }
                     break;
                 case OLED_SCROLL_LEFT:
-                    Serial.print("Scrolling left with parameters: ");
                     Serial.print(actionData.param1, HEX);
                     Serial.print(", ");
                     Serial.print(actionData.param2, HEX);
@@ -330,7 +320,6 @@ void OLED_MANAGERTask(void *pvParameters)
                     startScrollLeftImplementation(actionData.param1, actionData.param2, actionData.param3);
                     break;
                 case OLED_SCROLL_RIGHT:
-                    Serial.print("Scrolling right with parameters: ");
                     Serial.print(actionData.param1, HEX);
                     Serial.print(", ");
                     Serial.print(actionData.param2, HEX);
