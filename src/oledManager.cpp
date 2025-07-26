@@ -154,7 +154,7 @@ void sendCommand(uint8_t command)
     delay(10);
 }
 
-void startScrollLeftImplementation(uint8_t startPage, uint8_t endPage, uint8_t speed)
+void startScrollLeftImplementation(uint16_t startPage, uint8_t endPage, uint8_t speed)
 {
     uint8_t interval;
     switch (speed)
@@ -201,7 +201,7 @@ void startScrollLeftImplementation(uint8_t startPage, uint8_t endPage, uint8_t s
     delay(10);
 }
 
-void startScrollRightImplementation(uint8_t startPage, uint8_t endPage, uint8_t speed)
+void startScrollRightImplementation(uint16_t startPage, uint8_t endPage, uint8_t speed)
 {
     uint8_t interval;
     switch (speed)
